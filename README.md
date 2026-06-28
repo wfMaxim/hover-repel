@@ -1,5 +1,7 @@
 # Hover Repel
 
+![Hover Repel demo](./assets/demo.gif)
+
 A tiny hover interaction library that makes elements react to your cursor with a quick directional “repel” movement.
 
 Hover Repel pushes an element away based on the direction and speed of your pointer, then smoothly returns it to its original position. It is great for buttons, cards, icons, badges, product items, playful UI details, and landing pages.
