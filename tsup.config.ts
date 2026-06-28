@@ -14,7 +14,7 @@ export default defineConfig([
   },
   {
     entry: {
-      "browser.global": "src/browser.ts"
+      browser: "src/browser.ts"
     },
     format: ["iife"],
     globalName: "HoverRepel",
