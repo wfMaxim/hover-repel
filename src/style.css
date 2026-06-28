@@ -1,0 +1,26 @@
+[data-repel-container] {
+  display: grid;
+  place-items: center;
+}
+
+[data-repel] {
+  --repel-x: 0px;
+  --repel-y: 0px;
+  --repel-r: 0deg;
+  --repel-duration: 1000ms;
+  --repel-ease: cubic-bezier(.16, 1.8, .35, 1);
+
+  transform:
+    translate3d(var(--repel-x), var(--repel-y), 0)
+    rotate(var(--repel-r));
+
+  transition: transform var(--repel-duration) var(--repel-ease);
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-repel] {
+    transition: none;
+    transform: none;
+  }
+}
