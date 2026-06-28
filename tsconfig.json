@@ -15,9 +15,7 @@
 
     "skipLibCheck": true,
     "noEmitOnError": true,
-    "isolatedModules": true,
-
-    "ignoreDeprecations": "6.0"
+    "isolatedModules": true
   },
   "include": ["src"],
   "exclude": ["dist", "node_modules"]
