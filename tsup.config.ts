@@ -19,6 +19,8 @@ export default defineConfig([
     format: ["iife"],
     globalName: "HoverRepel",
     sourcemap: true,
-    clean: false
+    clean: false,
+    dts: false,
+    platform: "browser"
   }
 ]);
