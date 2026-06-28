@@ -11,6 +11,10 @@ export function createRepelDirective(
   globalOptions: HoverRepelVueOptions = {}
 ): Directive<RepelElement, RepelOptions | undefined> {
   return {
+    getSSRProps() {
+      return {};
+    },
+
     mounted(element, binding) {
       element.dataset.repel = "";
 
