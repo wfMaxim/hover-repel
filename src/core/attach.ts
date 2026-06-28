@@ -65,10 +65,30 @@ export function attachRepel(
   }
 
   let resetTimeout: number | undefined;
+  let previousPointerEvents: string | undefined;
+
+  const disablePointerEvents = () => {
+    if (previousPointerEvents !== undefined) {
+      return;
+    }
+
+    previousPointerEvents = target.style.pointerEvents;
+    target.style.pointerEvents = "none";
+  };
+
+  const restorePointerEvents = () => {
+    if (previousPointerEvents === undefined) {
+      return;
+    }
+
+    target.style.pointerEvents = previousPointerEvents;
+    previousPointerEvents = undefined;
+  };
 
   const onPointerEnter = () => {
-    if (resetTimeout) {
+    if (resetTimeout !== undefined) {
       clearTimeout(resetTimeout);
+      resetTimeout = undefined;
     }
 
     const { moveX, moveY, mouseSpeed } = getPointerMovement();
@@ -113,11 +133,14 @@ export function attachRepel(
     target.style.setProperty("--repel-x", `${directionX * moveStrength}px`);
     target.style.setProperty("--repel-y", `${directionY * moveStrength}px`);
     target.style.setProperty("--repel-r", `${rotation}deg`);
+    disablePointerEvents();
 
     resetTimeout = window.setTimeout(() => {
       target.style.setProperty("--repel-x", "0px");
       target.style.setProperty("--repel-y", "0px");
       target.style.setProperty("--repel-r", "0deg");
+      restorePointerEvents();
+      resetTimeout = undefined;
     }, resetDelay);
   };
 
@@ -126,9 +149,11 @@ export function attachRepel(
   return () => {
     container.removeEventListener("pointerenter", onPointerEnter);
 
-    if (resetTimeout) {
+    if (resetTimeout !== undefined) {
       clearTimeout(resetTimeout);
     }
+
+    restorePointerEvents();
 
     target.style.removeProperty("--repel-x");
     target.style.removeProperty("--repel-y");
