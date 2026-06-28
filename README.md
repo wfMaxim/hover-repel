@@ -1,10 +1,8 @@
 # Hover Repel
 
-A tiny interaction library that makes elements react to your cursor with a quick directional “repel” movement.
+A tiny hover interaction library that makes elements react to your cursor with a quick directional “repel” movement.
 
-Instead of sticking to the cursor like a magnetic hover effect, Hover Repel pushes the element away based on the direction and speed of your pointer. Fast movement creates a stronger impact, while the element smoothly snaps back into place.
-
-It works with plain HTML, vanilla JavaScript, Vue, Nuxt, React, Astro, and most modern front-end setups.
+Hover Repel pushes an element away based on the direction and speed of your pointer, then smoothly returns it to its original position. It is great for buttons, cards, icons, badges, product items, playful UI details, and landing pages.
 
 ---
 
@@ -13,14 +11,14 @@ It works with plain HTML, vanilla JavaScript, Vue, Nuxt, React, Astro, and most 
 - Direction-aware hover movement
 - Speed-based movement strength
 - Optional rotation/tilt effect
-- Simple `data-repel` API for vanilla projects
+- Works with vanilla HTML/JS, Vue, Nuxt, React, Astro, and more
+- Simple `data-repel` API
 - Vue directive support with `v-repel`
-- Nuxt-friendly setup
-- Optional custom hitbox with `data-repel-container`
+- Optional stable hitbox with `data-repel-container`
 - Automatically creates a wrapper when needed
-- Lightweight and dependency-free core
+- Lightweight core
 - TypeScript support
-- Respects `prefers-reduced-motion`
+- Reduced-motion friendly
 
 ---
 
@@ -30,13 +28,9 @@ It works with plain HTML, vanilla JavaScript, Vue, Nuxt, React, Astro, and most 
 npm install hover-repel
 ```
 
-or
-
 ```bash
 pnpm add hover-repel
 ```
-
-or
 
 ```bash
 yarn add hover-repel
@@ -44,19 +38,79 @@ yarn add hover-repel
 
 ---
 
-## Quick Start
+## Vanilla HTML / JavaScript
 
-### Vanilla JavaScript
-
-Add `data-repel` to any element you want to animate.
+Use the browser build from a CDN.
 
 ```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hover-repel/dist/style.css">
+
 <div data-repel class="card">
   Hover me
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/hover-repel/dist/browser.global.js"></script>
+<script>
+  HoverRepel.repel();
+</script>
 ```
 
-Then initialize Hover Repel:
+Example page:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hover Repel Demo</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hover-repel/dist/style.css">
+
+  <style>
+    body {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #111;
+    }
+
+    .card {
+      width: 180px;
+      height: 240px;
+      border-radius: 24px;
+      background: #31e981;
+    }
+  </style>
+</head>
+<body>
+  <div data-repel class="card"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/hover-repel/dist/browser.global.js"></script>
+  <script>
+    HoverRepel.repel();
+  </script>
+</body>
+</html>
+```
+
+You can also use local files:
+
+```html
+<link rel="stylesheet" href="./style.css">
+
+<div data-repel class="card"></div>
+
+<script src="./browser.global.js"></script>
+<script>
+  HoverRepel.repel();
+</script>
+```
+
+---
+
+## Bundler Usage
+
+For Vite, Webpack, Parcel, Astro, React, Vue, Nuxt, and other bundlers:
 
 ```js
 import { repel } from "hover-repel";
@@ -65,13 +119,44 @@ import "hover-repel/style.css";
 repel();
 ```
 
-That’s it.
+Basic markup:
+
+```html
+<div data-repel class="card">
+  Hover me
+</div>
+```
 
 ---
 
-## Vue Quick Start
+## How It Works
 
-Install the Vue plugin once in your app.
+Hover Repel uses a moving element and an optional stable hitbox.
+
+```html
+<div data-repel-container>
+  <div data-repel></div>
+</div>
+```
+
+`data-repel-container` is the stable hover area.  
+`data-repel` is the element that visually moves.
+
+For most cases, you only need this:
+
+```html
+<div data-repel></div>
+```
+
+Hover Repel will automatically create a wrapper when needed.
+
+Use a manual container when you want full control over the hitbox, spacing, or layout.
+
+---
+
+## Vue
+
+Register the Vue plugin once:
 
 ```ts
 // main.ts
@@ -98,170 +183,7 @@ Then use `v-repel` anywhere:
 </template>
 ```
 
----
-
-## Nuxt Quick Start
-
-In Nuxt, load the CSS globally and register the Vue plugin on the client.
-
-### 1. Add the CSS
-
-```ts
-// nuxt.config.ts
-export default defineNuxtConfig({
-  css: ["hover-repel/style.css"]
-});
-```
-
-### 2. Create a client plugin
-
-```ts
-// plugins/hover-repel.client.ts
-import HoverRepelVue from "hover-repel/vue";
-
-export default defineNuxtPlugin((nuxtApp) => {
-  nuxtApp.vueApp.use(HoverRepelVue);
-});
-```
-
-### 3. Use it in components
-
-```vue
-<template>
-  <div v-repel class="card">
-    Hover me
-  </div>
-</template>
-```
-
-Because the plugin file ends in `.client.ts`, Nuxt only runs it in the browser. This is the safest setup for DOM-based hover effects.
-
----
-
-## Basic Styling Example
-
-```html
-<button data-repel class="button">
-  Get started
-</button>
-```
-
-```css
-.button {
-  padding: 1rem 1.5rem;
-  border: 0;
-  border-radius: 999px;
-  background: #31e981;
-  color: #111;
-  font-weight: 700;
-  cursor: pointer;
-}
-```
-
-```js
-import { repel } from "hover-repel";
-import "hover-repel/style.css";
-
-repel();
-```
-
-When the pointer enters the element, it moves slightly in the direction of the cursor movement and then returns to its original position.
-
----
-
-## How It Works
-
-Hover Repel uses two concepts:
-
-```html
-<div data-repel-container>
-  <div data-repel></div>
-</div>
-```
-
-The container acts as the stable hover area.  
-The repel element is the element that visually moves.
-
-This prevents flickering, because the hitbox stays in place while the child element moves away from the pointer.
-
----
-
-## Easiest Usage
-
-You can use only `data-repel`:
-
-```html
-<div data-repel class="box"></div>
-```
-
-Hover Repel will automatically wrap the element internally so the hover area stays stable.
-
-This is the easiest option for most projects.
-
----
-
-## Advanced Usage With Custom Container
-
-For more control, define the container yourself:
-
-```html
-<div data-repel-container class="box-hitbox">
-  <div data-repel class="box"></div>
-</div>
-```
-
-This is useful when you want a larger hitbox, custom spacing, or full control over the layout.
-
-```css
-.box-hitbox {
-  display: grid;
-  place-items: center;
-  padding: 2rem;
-}
-
-.box {
-  width: 160px;
-  height: 160px;
-  border-radius: 2rem;
-  background: hotpink;
-}
-```
-
----
-
-## Vue Usage
-
-### Global Plugin
-
-```ts
-import { createApp } from "vue";
-import App from "./App.vue";
-
-import HoverRepelVue from "hover-repel/vue";
-import "hover-repel/style.css";
-
-const app = createApp(App);
-
-app.use(HoverRepelVue);
-
-app.mount("#app");
-```
-
-Then:
-
-```vue
-<template>
-  <div v-repel class="card">
-    Hover me
-  </div>
-</template>
-```
-
----
-
-### Vue With Options
-
-You can pass options directly to the directive:
+With options:
 
 ```vue
 <template>
@@ -271,18 +193,13 @@ You can pass options directly to the directive:
       maxRotate: 35,
       resetDelay: 250
     }"
-    class="button"
   >
     Hover me harder
   </button>
 </template>
 ```
 
----
-
-### Vue Global Defaults
-
-You can also set global defaults when installing the plugin:
+Global defaults:
 
 ```ts
 app.use(HoverRepelVue, {
@@ -292,31 +209,7 @@ app.use(HoverRepelVue, {
 });
 ```
 
-Then every `v-repel` element uses those defaults:
-
-```vue
-<template>
-  <button v-repel>
-    Uses global settings
-  </button>
-</template>
-```
-
-You can still override options per element:
-
-```vue
-<template>
-  <button v-repel="{ maxStrength: 120 }">
-    Stronger than the global default
-  </button>
-</template>
-```
-
----
-
-### Local Vue Directive
-
-If you do not want to register the plugin globally, you can import the directive locally.
+Local directive usage:
 
 ```vue
 <script setup lang="ts">
@@ -331,24 +224,9 @@ import "hover-repel/style.css";
 </template>
 ```
 
-In Vue `<script setup>`, imported directives named like `vSomething` can be used in the template as `v-something`.
-
 ---
 
-## Nuxt Usage
-
-### Recommended Nuxt Setup
-
-Use a client plugin:
-
-```ts
-// plugins/hover-repel.client.ts
-import HoverRepelVue from "hover-repel/vue";
-
-export default defineNuxtPlugin((nuxtApp) => {
-  nuxtApp.vueApp.use(HoverRepelVue);
-});
-```
+## Nuxt
 
 Add the CSS globally:
 
@@ -359,21 +237,28 @@ export default defineNuxtConfig({
 });
 ```
 
-Then use `v-repel` in any page or component:
+Create a client plugin:
+
+```ts
+// plugins/hover-repel.client.ts
+import HoverRepelVue from "hover-repel/vue";
+
+export default defineNuxtPlugin((nuxtApp) => {
+  nuxtApp.vueApp.use(HoverRepelVue);
+});
+```
+
+Use it in any component:
 
 ```vue
 <template>
-  <section>
-    <NuxtLink v-repel to="/contact" class="cta">
-      Contact us
-    </NuxtLink>
-  </section>
+  <NuxtLink v-repel to="/contact" class="cta">
+    Contact us
+  </NuxtLink>
 </template>
 ```
 
----
-
-### Nuxt With Global Defaults
+With global defaults:
 
 ```ts
 // plugins/hover-repel.client.ts
@@ -390,7 +275,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
 ---
 
-## React Usage
+## React
 
 React can use the vanilla API.
 
@@ -407,37 +292,11 @@ export function Card() {
 
     const destroy = attachRepel(ref.current);
 
-    return () => {
-      destroy();
-    };
+    return () => destroy();
   }, []);
 
   return (
     <div ref={ref} data-repel className="card">
-      Hover me
-    </div>
-  );
-}
-```
-
-You can also initialize all `[data-repel]` elements with `repel()` if your page is mostly static.
-
-```jsx
-import { useEffect } from "react";
-import { repel } from "hover-repel";
-import "hover-repel/style.css";
-
-export function Page() {
-  useEffect(() => {
-    const destroy = repel();
-
-    return () => {
-      destroy();
-    };
-  }, []);
-
-  return (
-    <div data-repel className="card">
       Hover me
     </div>
   );
@@ -450,8 +309,8 @@ export function Page() {
 
 | Attribute | Description | Default |
 | --- | --- | --- |
-| `data-repel` | Marks the element that should move | Required for vanilla usage |
-| `data-repel-container` | Marks the stable hover area | Optional |
+| `data-repel` | Element that should move | Required for vanilla usage |
+| `data-repel-container` | Stable hover area | Optional |
 | `data-repel-strength` | Maximum movement distance in pixels | `75` |
 | `data-repel-rotate` | Maximum rotation in degrees | `26` |
 | `data-repel-reset` | Delay before returning to rest in milliseconds | `300` |
@@ -469,29 +328,7 @@ Example:
 </div>
 ```
 
-In Vue, the directive automatically adds `data-repel`, so this is enough:
-
-```vue
-<template>
-  <div v-repel>
-    Hover me
-  </div>
-</template>
-```
-
-You can still use the attributes if you want:
-
-```vue
-<template>
-  <div
-    v-repel
-    data-repel-strength="100"
-    data-repel-rotate="35"
-  >
-    Hover me
-  </div>
-</template>
-```
+In Vue/Nuxt, `v-repel` automatically adds `data-repel`.
 
 ---
 
@@ -518,7 +355,7 @@ const destroy = repel({
 });
 ```
 
-Returns a cleanup function.
+Cleanup:
 
 ```js
 destroy();
@@ -534,11 +371,10 @@ Attaches the effect to one element.
 import { attachRepel } from "hover-repel";
 
 const element = document.querySelector(".card");
-
 const destroy = attachRepel(element);
 ```
 
-This is useful when working with components, dynamic elements, or frameworks.
+This is useful for components and dynamic elements.
 
 ---
 
@@ -561,7 +397,7 @@ type RepelOptions = {
 };
 ```
 
-For the `repel()` function, you can also pass:
+For `repel()` you can also pass:
 
 ```ts
 type RepelInitOptions = RepelOptions & {
@@ -570,15 +406,11 @@ type RepelInitOptions = RepelOptions & {
 };
 ```
 
----
-
-## Option Reference
-
 | Option | Description | Default |
 | --- | --- | --- |
-| `root` | Root element used by `repel()` to find targets | `document` |
-| `targetSelector` | Selector used by `repel()` to find moving elements | `[data-repel]` |
-| `containerSelector` | Selector used to find the stable hover container | `[data-repel-container]` |
+| `root` | Root used by `repel()` to find targets | `document` |
+| `targetSelector` | Selector used by `repel()` | `[data-repel]` |
+| `containerSelector` | Selector for the stable hover container | `[data-repel-container]` |
 | `autoWrap` | Automatically creates a wrapper when no container exists | `true` |
 | `minStrength` | Minimum movement distance | `18` |
 | `maxStrength` | Maximum movement distance | `75` |
@@ -586,7 +418,7 @@ type RepelInitOptions = RepelOptions & {
 | `minRotate` | Minimum rotation amount | `8` |
 | `maxRotate` | Maximum rotation amount | `26` |
 | `rotateMultiplier` | How much pointer speed affects rotation | `55` |
-| `resetDelay` | Delay before the element returns to rest | `300` |
+| `resetDelay` | Delay before returning to rest | `300` |
 
 ---
 
@@ -602,7 +434,7 @@ Hover Repel uses CSS variables for the transform:
 }
 ```
 
-You can customize the animation timing:
+Customize animation timing:
 
 ```css
 [data-repel] {
@@ -629,60 +461,6 @@ You can customize the animation timing:
 <div data-repel class="card"></div>
 ```
 
-For Vue:
-
-```vue
-<template>
-  <div v-repel class="card"></div>
-</template>
-```
-
----
-
-## Reduced Motion
-
-Hover Repel includes a reduced-motion fallback by default.
-
-```css
-@media (prefers-reduced-motion: reduce) {
-  [data-repel] {
-    transition: none;
-    transform: none;
-  }
-}
-```
-
-Users who prefer reduced motion will not get the animated movement effect.
-
----
-
-## Recommended Markup
-
-For most vanilla projects:
-
-```html
-<div data-repel></div>
-```
-
-For maximum layout control:
-
-```html
-<div data-repel-container>
-  <div data-repel></div>
-</div>
-```
-
-For Vue and Nuxt:
-
-```vue
-<template>
-  <div v-repel></div>
-</template>
-```
-
-Use the automatic wrapper for speed.  
-Use the manual container when you care about the exact hitbox, spacing, or layout behavior.
-
 ---
 
 ## Package Exports
@@ -693,34 +471,14 @@ import HoverRepelVue, { vRepel } from "hover-repel/vue";
 import "hover-repel/style.css";
 ```
 
-Available exports:
+For vanilla HTML:
 
-| Import | Description |
-| --- | --- |
-| `hover-repel` | Vanilla JavaScript API |
-| `hover-repel/vue` | Vue plugin and directive |
-| `hover-repel/style.css` | Required CSS styles |
-
----
-
-## Browser Support
-
-Hover Repel uses modern pointer events and CSS transforms.
-
-It works in all modern browsers, including:
-
-- Chrome
-- Edge
-- Firefox
-- Safari
-
----
-
-## Why Not Just Use `:hover`?
-
-CSS hover effects are great, but they usually do not know where the pointer came from or how fast it moved.
-
-Hover Repel tracks pointer movement globally, then uses that movement direction and speed when the pointer enters an element. This creates a more physical, responsive interaction.
+```html
+<script src="https://cdn.jsdelivr.net/npm/hover-repel/dist/browser.global.js"></script>
+<script>
+  HoverRepel.repel();
+</script>
+```
 
 ---
 
@@ -728,25 +486,23 @@ Hover Repel tracks pointer movement globally, then uses that movement direction 
 
 ### The effect does not work
 
-Make sure you imported the CSS:
+Make sure the CSS is loaded:
 
 ```js
 import "hover-repel/style.css";
 ```
 
-In Nuxt, add it to `nuxt.config.ts`:
+or in plain HTML:
 
-```ts
-export default defineNuxtConfig({
-  css: ["hover-repel/style.css"]
-});
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hover-repel/dist/style.css">
 ```
 
 ---
 
-### It works only on the first page load in Nuxt
+### Nuxt only works on first load
 
-Use the Vue plugin/directive setup instead of calling `repel()` manually.
+Use the Nuxt client plugin with `v-repel` instead of manually calling `repel()`.
 
 ```ts
 // plugins/hover-repel.client.ts
@@ -757,19 +513,13 @@ export default defineNuxtPlugin((nuxtApp) => {
 });
 ```
 
-Then use:
-
-```vue
-<div v-repel></div>
-```
-
 ---
 
 ### The layout changes unexpectedly
 
 Hover Repel automatically creates a wrapper when no `data-repel-container` exists.
 
-If you want full layout control, create the container yourself:
+For full layout control:
 
 ```html
 <div data-repel-container>
@@ -777,7 +527,7 @@ If you want full layout control, create the container yourself:
 </div>
 ```
 
-Or disable automatic wrapping in JavaScript:
+Or disable auto wrapping:
 
 ```js
 repel({
@@ -787,12 +537,12 @@ repel({
 
 ---
 
-## License
+## Browser Support
 
-MIT
+Hover Repel uses modern pointer events and CSS transforms. It works in all modern browsers.
 
 ---
 
-## Author
+## License
 
-Made with care for playful interfaces.
+MIT
